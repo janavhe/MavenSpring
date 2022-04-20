@@ -1,18 +1,49 @@
 package org.jazziel;
 
+import org.jazziel.entidades.Pokemon;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 public class SimpleController {
 
 
-    @GetMapping("/Hola")
-    public String homePage() {
-
-        return "Hola mundo";
+    @GetMapping("/pokemonEjemplo")
+    public Pokemon homePage() {
+        Pokemon ejemploPokemon = new Pokemon("Pikachu", "Hombre");
+        return ejemploPokemon;
     }
+
+    @GetMapping("/pokemonEjemplo/{nombrePokemon}")
+    public Pokemon pokemonPorUrl(@PathVariable String nombrePokemon) {
+        Pokemon ejemploPokemon = new Pokemon(nombrePokemon, "Hombre");
+        return ejemploPokemon;
+    }
+
+    @GetMapping("/sexoEjemplo/{sexoPokeon}")
+    public Pokemon sexoPorUrl(@PathVariable String sexoPokeon) {
+        Pokemon ejemploPokemon = new Pokemon("Pikachu", sexoPokeon);
+        return ejemploPokemon;
+    }
+
+    @GetMapping("/robarInfo/{nombrePokemon}")
+    public Pokemon robarInfo(@PathVariable String nombrePokemon) throws JSONException {
+        String uri = "https://pokeapi.co/api/v2/pokemon/" + nombrePokemon;
+        RestTemplate restTemplate = new RestTemplate();
+        String result = restTemplate.getForObject(uri, String.class);
+        JSONObject jsonObject= new JSONObject(result );
+
+        Pokemon ejemploPokemon = new Pokemon(result, "Hombre");
+        return ejemploPokemon;
+    }
+
+
 }
