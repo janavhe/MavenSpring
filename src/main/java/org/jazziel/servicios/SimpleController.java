@@ -1,4 +1,4 @@
-package org.jazziel;
+package org.jazziel.servicios;
 
 import org.jazziel.entidades.Pokemon;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,11 +37,15 @@ public class SimpleController {
     @GetMapping("/robarInfo/{nombrePokemon}")
     public Pokemon robarInfo(@PathVariable String nombrePokemon) throws JSONException {
         String uri = "https://pokeapi.co/api/v2/pokemon/" + nombrePokemon;
+
         RestTemplate restTemplate = new RestTemplate();
         String result = restTemplate.getForObject(uri, String.class);
-        JSONObject jsonObject= new JSONObject(result );
+        JSONObject jsonObject= new JSONObject(result);
 
-        Pokemon ejemploPokemon = new Pokemon(result, "Hombre");
+        String name = jsonObject.getString("name");
+        String type = jsonObject.getJSONArray("types").getJSONObject(0).getJSONObject("type").getString("name");
+
+        Pokemon ejemploPokemon = new Pokemon(name,type);
         return ejemploPokemon;
     }
 

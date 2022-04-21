@@ -6,11 +6,11 @@ public class Pokemon implements Serializable {
 
 
     private String name;
-    private String sexo;
+    private String tipo;
 
-    public Pokemon(String name, String sexo) {
+    public Pokemon(String name, String tipo) {
         this.name = name;
-        this.sexo = sexo;
+        this.tipo = tipo;
     }
 
     public String getName() {
@@ -21,19 +21,19 @@ public class Pokemon implements Serializable {
         this.name = name;
     }
 
-    public String getSexo() {
-        return sexo;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     @Override
     public String toString() {
         return "Pokemon{" +
                 "name='" + name + '\'' +
-                ", sexo='" + sexo + '\'' +
+                ", sexo='" + tipo + '\'' +
                 '}';
     }
 }
