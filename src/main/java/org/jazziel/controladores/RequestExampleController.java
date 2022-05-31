@@ -32,4 +32,9 @@ public class RequestExampleController {
         return PokemonServicio.getPokemonByIdName(nombrePokemon);
     }
 
+    @GetMapping("/evolutionPokemon/{idPokemon}")
+    public Pokemon getEvolucionPokemon(@PathVariable String idPokemon) throws JSONException {
+        return PokemonServicio.getPokemonEvolution(idPokemon);
+    }
+
 }

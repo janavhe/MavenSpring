@@ -1,9 +1,12 @@
 package org.jazziel.servicios;
 
+import org.jazziel.entidades.Objetos;
 import org.jazziel.entidades.Pokemon;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 public class PokemonServicio {
 
@@ -35,7 +38,6 @@ public class PokemonServicio {
         JSONObject jsonObject= new JSONObject(result);
 
         String urlImagen = jsonObject.getJSONObject("sprites").getString(tipoImagen);
-        System.out.println(urlImagen);
         return restTemplate.getForObject(urlImagen,byte[].class);
     }
 
@@ -44,5 +46,21 @@ public class PokemonServicio {
         JSONObject pokemonJsom = new JSONObject(json);
         System.out.println(pokemonJsom);
         return getPokemonByIdName(pokemonJsom.getString("nombrePokemon"));
+    }
+
+    public static Pokemon getPokemonEvolution (String idPokemon) throws JSONException {
+        final String uri = "https://pokeapi.co/api/v2/evolution-chain/" + idPokemon;
+
+        final RestTemplate restTemplate = new RestTemplate();
+        final String result = restTemplate.getForObject(uri, String.class);
+        JSONObject jsonObject= new JSONObject(result);
+
+        String name = jsonObject.getJSONObject("chain").getJSONObject("species").getString("name");
+//      String evolucion = getJSONArray("evolves_to").getJSONObject(0).getJSONObject("species").getString("name");
+        Pokemon pokemon = new Pokemon(name,"azul");
+        List<Pokemon> pokemonEvolusion = Pokemon.buscarEvoluciones(jsonObject.getJSONObject("chain"));
+        pokemonEvolusion.removeIf(x->x.getName().equals(pokemon.getName()));
+        pokemon.setEvolicion(pokemonEvolusion);
+        return pokemon;
     }
 }
